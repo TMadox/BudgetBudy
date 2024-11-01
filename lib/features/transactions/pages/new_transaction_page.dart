@@ -92,14 +92,17 @@ class _NewTransactionState extends State<NewTransaction> {
                   valueTransformer: (value) => value?.millisecondsSinceEpoch,
                 ),
                 SizedBox(height: 30),
-                ElevatedButton(
-                  child: const Text("Add"),
-                  onPressed: () {
-                    if (_formKey.currentState!.saveAndValidate()) {
-                      transactions.addTransactions(Transaction.fromMap(_formKey.currentState!.value));
-                      _formKey.currentState!.reset();
-                    }
-                  },
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    child: const Text("Add"),
+                    onPressed: () {
+                      if (_formKey.currentState!.saveAndValidate()) {
+                        transactions.addTransactions(Transaction.fromMap(_formKey.currentState!.value));
+                        _formKey.currentState!.reset();
+                      }
+                    },
+                  ),
                 ),
               ],
             ),
