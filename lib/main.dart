@@ -1,7 +1,5 @@
-import 'package:daily_spending/core/constants/app_strings.dart';
 import 'package:daily_spending/core/extension/context_extension.dart';
 import 'package:daily_spending/core/style/app_theme.dart';
-import 'package:daily_spending/core/utils/db_helper.dart';
 import 'package:daily_spending/features/intro/pages/splash_page.dart';
 import 'package:daily_spending/features/savings/controllers/savings_controller.dart';
 import 'package:daily_spending/features/savings/models/targets.dart';
