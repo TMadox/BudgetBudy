@@ -38,6 +38,7 @@ class SavingsController extends ChangeNotifier {
       await DBHelper.instance.insert(savingsTableName, saving.toMap());
       await updateTarget(target);
       notifyListeners();
+      EasyLoading.showSuccess("a New saving has been added, Good job!");
     } catch (e) {
       EasyLoading.showError(e.toString());
     } finally {
@@ -47,14 +48,12 @@ class SavingsController extends ChangeNotifier {
 
   Future<void> addTarget(Target target) async {
     try {
-      EasyLoading.show();
       _targets.add(target);
       notifyListeners();
       await DBHelper.instance.insert(targetsTableName, target.toMap());
+      EasyLoading.showSuccess("a New target has been added!");
     } catch (e) {
       EasyLoading.showError(e.toString());
-    } finally {
-      EasyLoading.dismiss();
     }
   }
 

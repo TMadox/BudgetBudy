@@ -101,34 +101,8 @@ class _AddTargetSheetState extends State<AddTargetSheet> {
                   onPressed: () {
                     if (_formKey.currentState!.saveAndValidate()) {
                       log(_formKey.currentState!.value.toString());
-                      savings.addTarget(
-                        Target.fromMap(_formKey.currentState!.value),
-                      );
+                      savings.addTarget(Target.fromMap(_formKey.currentState!.value));
                       _formKey.currentState!.reset();
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: Theme.of(context).primaryColorLight,
-                          content: Text(
-                            "Data added Succesfully!",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          //Theme.of(context).errorColor is now deprecated; Theme.of(context).colorScheme.error is used as a modern replacement.
-                          backgroundColor: Theme.of(context).colorScheme.error,
-                          content: Text(
-                            "Fields can't be empty!",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      );
                     }
                   },
                 ),
