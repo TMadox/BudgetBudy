@@ -58,6 +58,20 @@ class SavingsController extends ChangeNotifier {
     }
   }
 
+  Future<void> deleteTarget(int targetId) async {
+    try {
+      EasyLoading.show();
+      final int targetIndex = _targets.indexWhere((element) => element.id == targetId);
+      _targets.removeAt(targetIndex);
+      notifyListeners();
+      await DBHelper.instance.delete(targetsTableName, targetId);
+    } catch (e) {
+      EasyLoading.showError(e.toString());
+    } finally {
+      EasyLoading.dismiss();
+    }
+  }
+
   Future<void> updateTarget(Target target) async {
     final num totalSavings = _savings.fold(0, (previousValue, element) => previousValue + element.amount);
     final num percentage = ((totalSavings / target.amount) * 100).clamp(0, 100);

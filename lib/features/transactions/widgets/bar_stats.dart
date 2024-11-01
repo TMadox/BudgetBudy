@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:daily_spending/core/extension/num_extensions.dart';
 import 'package:daily_spending/features/transactions/controllers/transaction_controller.dart';
+import 'package:daily_spending/features/transactions/data/transaction_enums.dart';
 import 'package:daily_spending/features/transactions/models/transaction.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -35,14 +36,14 @@ class _BarStatsState extends State<BarStats> {
             Text(
               'Analysis',
               style: TextStyle(
-                color: Theme.of(context).primaryColorLight,
+                color: Colors.white,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
             4.space,
             Text(
-              'Last Seven Days',
+              widget.transactionsController.transactionDate == TransactionDate.yearly ? 'Last 12 Months' : 'Last Seven Days',
               style: TextStyle(
                 color: Theme.of(context).primaryColorLight,
                 fontSize: 18,
@@ -70,7 +71,7 @@ class BarData extends BarChartData {
   BarData(
     this.transactionsController, {
     List<Map<String, dynamic>>? groupedTransactionValues,
-  }) : groupedTransactionValues = groupedTransactionValues ?? transactionsController.groupedTransactionValues;
+  }) : groupedTransactionValues = groupedTransactionValues ?? transactionsController.groupedTransactionValues();
 
   @override
   List<BarChartGroupData> get barGroups => List.generate(
@@ -89,17 +90,15 @@ class BarData extends BarChartData {
               ),
             ],
           )
-
-      //  _buildBar(index, groupedTransactionValues[index]['amount'], isTouched: false),
       );
+
   @override
-  // TODO: implement touchData
   FlTouchData<BaseTouchResponse> get touchData => BarTouchData(
         touchTooltipData: BarTouchTooltipData(
           getTooltipItem: (group, groupIndex, rod, rodIndex) {
-            String weekDay = transactionsController.groupedTransactionValues[group.x]['day'];
+            String title = groupedTransactionValues[group.x]['day'];
             return BarTooltipItem(
-              weekDay + '\n' + (rod.toY).toString(),
+              title + '\n' + (rod.toY).toString(),
               TextStyle(color: Colors.yellow),
             );
           },
@@ -112,7 +111,7 @@ class BarData extends BarChartData {
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            getTitlesWidget: (double value, meta) => Text(transactionsController.groupedTransactionValues[0]['date'].toString()),
+            getTitlesWidget: (double value, meta) => Text(groupedTransactionValues[0]['date'].toString()),
           ),
         ),
         // Build Y axis.

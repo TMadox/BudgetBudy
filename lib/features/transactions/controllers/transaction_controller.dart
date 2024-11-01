@@ -159,7 +159,7 @@ class TransactionsController with ChangeNotifier {
     final Transaction item = _transactions.firstWhere((item) => item.id == id);
     _transactions.remove(item);
     notifyListeners();
-    await DBHelper.instance.delete(id);
+    await DBHelper.instance.delete(transactionsTableName, id);
   }
 
   List<Map<String, Object>> getTransactionValuesForMonths(int year, List<int> months, List<String> monthTitles) {
@@ -220,14 +220,34 @@ class TransactionsController with ChangeNotifier {
     return getTransactionValuesForMonths(year, lastSixMonths, lastSixMonthTitles);
   }
 
-  List<Map<String, dynamic>> get groupedTransactionValues => List.generate(7, (index) {
-        final DateTime weekDay = DateTime.now().subtract(Duration(days: index));
-        // Sum transactions for the specific day
-        final num dailyTotal = _transactions.where((transaction) => transaction.date.isSameDay(weekDay)).fold<num>(0, (sum, trx) => sum + trx.amount);
+  List<Map<String, dynamic>> groupedTransactionValues() {
+    final now = DateTime.now();
+
+    if (transactionDate == TransactionDate.weekly) {
+      return List.generate(7, (index) {
+        final DateTime weekDay = now.subtract(Duration(days: index));
+        final num totalSum = _transactions.where((transaction) => transaction.date.isSameDay(weekDay)).fold<num>(0, (sum, trx) => sum + trx.amount);
         return {
-          'date': DateFormat.d().format(weekDay),
-          'amount': dailyTotal.toDouble(),
-          'day': DateFormat.EEEE().format(weekDay),
+          'date': DateFormat.d().format(weekDay), // Day of the month
+          'amount': totalSum.toDouble(),
+          'day': DateFormat.EEEE().format(weekDay), // Full weekday name
         };
-      }).reversed.toList();
+      }).reversed.toList(); // Reverse to show from earliest to latest
+    } else {
+      return List.generate(
+        12,
+        (index) {
+          final DateTime monthDate = DateTime(now.year, index + 1);
+          final num totalSum = _transactions
+              .where((transaction) => transaction.date.year == monthDate.year && transaction.date.month == monthDate.month)
+              .fold<num>(0, (sum, trx) => sum + trx.amount);
+          return {
+            'date': DateFormat.M().format(monthDate), // Numeric month representation (e.g., 1 for January)
+            'amount': totalSum.toDouble(),
+            'day': DateFormat.MMMM().format(monthDate), // Full month name
+          };
+        },
+      );
+    }
+  }
 }

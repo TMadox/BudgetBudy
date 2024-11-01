@@ -1,8 +1,6 @@
-import 'package:daily_spending/core/extension/datetime_extension.dart';
-import 'package:daily_spending/core/extension/num_extensions.dart';
 import 'package:daily_spending/features/savings/controllers/savings_controller.dart';
-import 'package:daily_spending/features/savings/pages/savings_page.dart';
 import 'package:daily_spending/features/savings/widgets/add_target_sheet.dart';
+import 'package:daily_spending/features/savings/widgets/target_card.dart';
 import 'package:daily_spending/widgets/custom_future_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -45,33 +43,7 @@ class TargetsPage extends StatelessWidget {
                       child: ListView.separated(
                         itemCount: controller.targets.length,
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        itemBuilder: (context, index) => Card(
-                          child: ListTile(
-                            onTap: () => Navigator.of(context).pushNamed(SavingsPage.routeName, arguments: controller.targets[index]),
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(controller.targets[index].title),
-                                Text("₹" + controller.targets[index].amount.toString()),
-                              ],
-                            ),
-                            trailing: Text("${controller.targets[index].percentage.toDouble()}%"),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                4.space,
-                                LinearProgressIndicator(value: controller.targets[index].percentage.toDouble() / 100),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(controller.targets[index].startDate.ymd),
-                                    Text(controller.targets[index].endDate.ymd),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                        itemBuilder: (context, index) => TargetCard(target: controller.targets[index]),
                         separatorBuilder: (context, index) => SizedBox(height: 4),
                       ),
                     ),

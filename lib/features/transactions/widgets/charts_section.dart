@@ -2,9 +2,8 @@ import 'package:daily_spending/features/transactions/controllers/transaction_con
 import 'package:daily_spending/features/transactions/data/transaction_enums.dart';
 import 'package:daily_spending/features/transactions/models/pie_data.dart';
 import 'package:daily_spending/features/transactions/models/transaction.dart';
+import 'package:daily_spending/features/transactions/widgets/bar_stats.dart';
 import 'package:daily_spending/features/transactions/widgets/pie_chart.dart';
-import 'package:daily_spending/screens/statistics/bar_stats.dart';
-import 'package:daily_spending/screens/statistics/yearly_stats.dart';
 import 'package:flutter/material.dart';
 
 class ChartsSection extends StatelessWidget {
@@ -35,27 +34,4 @@ class ChartsSection extends StatelessWidget {
       ),
     );
   }
-}
-
-Column yearlyChart(
-  BuildContext context,
-  List<PieData> yearlyData,
-  List<Map<String, Object>> firstSixMonths,
-  List<Map<String, Object>> lastSixMonths,
-  Function checkForEmpty,
-) {
-  return Column(
-    children: [
-      checkForEmpty(firstSixMonths)
-          ? Container()
-          : YearlyStats(
-              groupedTransactionValues: firstSixMonths,
-            ),
-      checkForEmpty(lastSixMonths)
-          ? Container()
-          : YearlyStats(
-              groupedTransactionValues: lastSixMonths,
-            ),
-    ],
-  );
 }

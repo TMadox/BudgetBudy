@@ -143,8 +143,8 @@ class DBHelper {
   }
 
   //deleting the transactions
-  Future<void> delete(dynamic id) async {
+  Future<void> delete(String tableName, int id) async {
     final sql.Database sqlDb = await initDatabase();
-    await sqlDb.delete('transactions', where: "id=?", whereArgs: [id]);
+    await sqlDb.delete(tableName, where: "id=?", whereArgs: [id]);
   }
 }
