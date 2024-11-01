@@ -1,3 +1,4 @@
+import 'package:daily_spending/core/extension/num_extensions.dart';
 import 'package:daily_spending/features/transactions/controllers/transaction_controller.dart';
 import 'package:daily_spending/features/transactions/data/transaction_enums.dart';
 import 'package:daily_spending/features/transactions/models/pie_data.dart';
@@ -29,6 +30,7 @@ class ChartsSection extends StatelessWidget {
               transactions: transactions,
               transactionsController: transactionsController,
             ),
+          24.space,
           MyPieChart(pieData: pieData),
         ],
       ),

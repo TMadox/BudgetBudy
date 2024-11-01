@@ -84,7 +84,6 @@ class _TransactionListItemsState extends State<TransactionListItems> {
                             'Yes',
                             style: TextStyle(
                               fontSize: 20,
-                              color: Theme.of(context).primaryColor,
                             ),
                           ),
                         ),

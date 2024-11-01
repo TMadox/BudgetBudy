@@ -81,7 +81,7 @@ class TransactionsController with ChangeNotifier {
         {
           // Calculate the start and end dates for the year
           final DateTime startDate = DateTime(year ?? DateTime.now().year, 1, 1);
-          final DateTime endDate = DateTime(year ?? DateTime.now().year + 1, 1, 1).subtract(Duration(milliseconds: 1));
+          final DateTime endDate = DateTime((year ?? DateTime.now().year) + 1, 1, 1).subtract(Duration(milliseconds: 1));
           // Convert dates to milliseconds since epoch
           final int startTimestamp = startDate.millisecondsSinceEpoch;
           final int endTimestamp = endDate.millisecondsSinceEpoch;
@@ -101,15 +101,14 @@ class TransactionsController with ChangeNotifier {
 
   Future<void> addTransactions(Transaction transaction) async {
     try {
-      final now = DateTime.now();
-
+      final DateTime now = DateTime.now();
       switch (transactionDate) {
         case TransactionDate.daily:
           _transactions.add(transaction);
           break;
 
         case TransactionDate.weekly:
-          if (!transaction.date.isAfter(now.subtract(Duration(days: 7)))) {
+          if (transaction.date.isAfter(now.subtract(Duration(days: 7)))) {
             _transactions.add(transaction);
           }
           break;
@@ -240,7 +239,7 @@ class TransactionsController with ChangeNotifier {
           final DateTime monthDate = DateTime(now.year, index + 1);
           final num totalSum = _transactions
               .where((transaction) => transaction.date.year == monthDate.year && transaction.date.month == monthDate.month)
-              .fold<num>(0, (sum, trx) => sum + trx.amount);
+              .fold<num>(0, (sum, transaction) => sum + transaction.amount);
           return {
             'date': DateFormat.M().format(monthDate), // Numeric month representation (e.g., 1 for January)
             'amount': totalSum.toDouble(),
