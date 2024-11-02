@@ -75,6 +75,7 @@ class DBHelper {
           'category TEXT'
           ')',
         );
+        //added new table savings
         await db.execute(
           'CREATE TABLE savings ('
           'id INTEGER PRIMARY KEY, '
@@ -85,6 +86,7 @@ class DBHelper {
           'FOREIGN KEY(targetId) REFERENCES targets(id) ON DELETE CASCADE'
           ')',
         );
+        //added new table targets
         await db.execute(
           'CREATE TABLE targets ('
           'id INTEGER PRIMARY KEY, '
@@ -118,6 +120,7 @@ class DBHelper {
 
   //Retereving the transaction data
   Future<List<Map<String, dynamic>>> fetch(String tableName, {String? where, List<dynamic>? whereArgs}) async {
+    //added extra parameters to further customize fetching.
     final sql.Database sqlDb = await initDatabase();
     return sqlDb.query(
       tableName,

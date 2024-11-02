@@ -22,6 +22,7 @@ class SavingsController extends ChangeNotifier {
   }
 
   Future<List<Saving>> loadSavingsFromTarget(int targetId) async {
+    //Loading savings from a specific target
     final List<Map<String, dynamic>> fetchTargets = await DBHelper.instance.fetch(
       savingsTableName,
       where: 'targetId = ?',
@@ -33,8 +34,10 @@ class SavingsController extends ChangeNotifier {
 
   Future<void> addSavings(Saving saving, Target target) async {
     try {
+    
       EasyLoading.show();
       _savings.add(saving);
+      //adding a new saving related to a specific target, then update that target.
       await DBHelper.instance.insert(savingsTableName, saving.toMap());
       await updateTarget(target);
       notifyListeners();
@@ -48,6 +51,7 @@ class SavingsController extends ChangeNotifier {
 
   Future<void> addTarget(Target target) async {
     try {
+      //Adding new target just like the other inputs
       _targets.add(target);
       notifyListeners();
       await DBHelper.instance.insert(targetsTableName, target.toMap());
@@ -59,6 +63,7 @@ class SavingsController extends ChangeNotifier {
 
   Future<void> deleteTarget(int targetId) async {
     try {
+      //Implemented easy loading to show the user that the target is being deleted
       EasyLoading.show();
       final int targetIndex = _targets.indexWhere((element) => element.id == targetId);
       _targets.removeAt(targetIndex);
@@ -72,6 +77,7 @@ class SavingsController extends ChangeNotifier {
   }
 
   Future<void> updateTarget(Target target) async {
+      //We get the total of a target's savings and edit it's completion percentage accordingly.
     final num totalSavings = _savings.fold(0, (previousValue, element) => previousValue + element.amount);
     final num percentage = ((totalSavings / target.amount) * 100).clamp(0, 100);
     await DBHelper.instance.updateRecord(
